@@ -1,0 +1,322 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Docker 容器编排 | 我的博客</title><meta name="author" content="zxiny"><meta name="copyright" content="zxiny"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Docker-Compose一、是什么​		Docker Compose 是用于定义和运行多容器应用的编排工具，通过一个 docker-compose.yml 文件统一管理容器、网络、卷。 ​		需要定义一个YAML格式的配置文件docker-compose.yml，配置了多个容器之间的调用关系。 ​		Docker Compose 是Docker官方的开源项目，负责实现对Docker容器集群的快">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker 容器编排">
+<meta property="og:url" content="https://zxiny343.github.io/ops/ops/docker/80380182/">
+<meta property="og:site_name" content="我的博客">
+<meta property="og:description" content="Docker-Compose一、是什么​		Docker Compose 是用于定义和运行多容器应用的编排工具，通过一个 docker-compose.yml 文件统一管理容器、网络、卷。 ​		需要定义一个YAML格式的配置文件docker-compose.yml，配置了多个容器之间的调用关系。 ​		Docker Compose 是Docker官方的开源项目，负责实现对Docker容器集群的快">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/zxiny343/PicGo/blog/20260412173938542.jpeg">
+<meta property="article:published_time" content="2026-03-11T13:39:18.000Z">
+<meta property="article:modified_time" content="2026-04-12T09:44:13.589Z">
+<meta property="article:author" content="zxiny">
+<meta property="article:tag" content="Docker">
+<meta property="article:tag" content="Docker Compose">
+<meta property="article:tag" content="容器">
+<meta property="article:tag" content="容器编排">
+<meta property="article:tag" content="调度">
+<meta property="article:tag" content="集群管理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/zxiny343/PicGo/blog/20260412173938542.jpeg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Docker 容器编排",
+  "url": "https://zxiny343.github.io/ops/ops/docker/80380182/",
+  "image": "https://cdn.jsdelivr.net/gh/zxiny343/PicGo/blog/20260412173938542.jpeg",
+  "datePublished": "2026-03-11T13:39:18.000Z",
+  "dateModified": "2026-04-12T09:44:13.589Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "zxiny",
+      "url": "https://zxiny343.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://zxiny343.github.io/ops/ops/docker/80380182/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":500,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Docker 容器编排',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 8.1.1"></head><body><div class="bg-animation" id="web_bg" style="background-image: url(https://cdn.jsdelivr.net/gh/zxiny343/PicGo/blog/20260412225243906.jpg);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/gaegfdaeff.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">16</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">57</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa-solid fa-layer-group"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 链接</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://cdn.jsdelivr.net/gh/zxiny343/PicGo/blog/20260412173938542.jpeg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">我的博客</span></a><a class="nav-page-title" href="/"><span class="site-name">Docker 容器编排</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa-solid fa-layer-group"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 链接</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></li><li><a class="site-page child" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Docker 容器编排</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-03-11T13:39:18.000Z" title="发表于 2026-03-11 21:39:18">2026-03-11</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-04-12T09:44:13.589Z" title="更新于 2026-04-12 17:44:13">2026-04-12</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/ops/">ops</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/ops/docker/">docker</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="Docker-Compose"><a href="#Docker-Compose" class="headerlink" title="Docker-Compose"></a>Docker-Compose</h1><h2 id="一、是什么"><a href="#一、是什么" class="headerlink" title="一、是什么"></a>一、是什么</h2><p>​		Docker Compose 是用于定义和运行多容器应用的编排工具，通过一个 <code>docker-compose.yml</code> 文件统一管理容器、网络、卷。</p>
+<p>​		需要定义一个YAML格式的配置文件<code>docker-compose.yml</code>，配置了多个容器之间的调用关系。</p>
+<p>​		Docker Compose 是Docker官方的开源项目，负责实现对Docker容器集群的快速编排。</p>
+<ul>
+<li>下载 ，版本比较久了 在github上找吧</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://github.com/docker/compose/releases">https://github.com/docker/compose/releases</a></p>
+<ul>
+<li>版本依赖</li>
+</ul>
+<p>如果你现在 Docker 是 <strong>19.x &#x2F; 20.x</strong>，只能用github上v1版本的</p>
+<p>离线下载 → 上传服务器 </p>
+<p>找到</p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker-compose-Linux-x86<span class="built_in">_</span>64</span><br><span class="line">版本：1.29.2 </span><br><span class="line">docker-compose version 1.29.2        ← v1 最终稳定版</span><br></pre></td></tr></table></figure>
+
+<p>上传和添加到PATH</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mv</span> docker-compose-Linux-x86_64 /usr/local/bin/docker-compose</span><br><span class="line"><span class="built_in">chmod</span> +x /usr/local/bin/docker-compose</span><br></pre></td></tr></table></figure>
+
+<h2 id="二、常用命令"><a href="#二、常用命令" class="headerlink" title="二、常用命令"></a>二、常用命令</h2><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>docker-compose up</td>
+<td>启动所有docker-compose服务</td>
+</tr>
+<tr>
+<td>docker-compose up -d</td>
+<td>启动所有docker-compose服务，并后台运行</td>
+</tr>
+<tr>
+<td>docker-compose down</td>
+<td>停止并删除 <strong>容器 + 网络</strong></td>
+</tr>
+<tr>
+<td>docker-compose down -v</td>
+<td>同时删除 volume（⚠ 数据会被删除）</td>
+</tr>
+<tr>
+<td>docker-compose up –build</td>
+<td>重新构建镜像后启动</td>
+</tr>
+<tr>
+<td>docker-compose stop</td>
+<td>仅停止容器，不删除</td>
+</tr>
+<tr>
+<td>docker-compose restart</td>
+<td>重启</td>
+</tr>
+<tr>
+<td>docker-compose restart 服务名</td>
+<td>重启</td>
+</tr>
+<tr>
+<td>docker-compose ps</td>
+<td>展示当前compose编排的运行的中的容器</td>
+</tr>
+<tr>
+<td>docker-compose top</td>
+<td>展示当前compose编排过的容器进程</td>
+</tr>
+<tr>
+<td>docker-compose logs</td>
+<td>查看日志</td>
+</tr>
+<tr>
+<td>docker-compose logs -f</td>
+<td>实时日志</td>
+</tr>
+<tr>
+<td>docker-compose logs -f mysql</td>
+<td>查看指定服务</td>
+</tr>
+<tr>
+<td>docker-compose up -d redis</td>
+<td>单个服务启动</td>
+</tr>
+<tr>
+<td>docker-compose stop redis</td>
+<td>单个服务停止</td>
+</tr>
+<tr>
+<td>docker-compose exec mysql bash</td>
+<td>进入容器</td>
+</tr>
+<tr>
+<td>docker-compose config -q</td>
+<td>检查 compose 文件是否正确，加-q无输出代表无问题</td>
+</tr>
+<tr>
+<td>docker-compose pull</td>
+<td>拉取镜像</td>
+</tr>
+<tr>
+<td>docker-compose config –services</td>
+<td>查看服务列表</td>
+</tr>
+<tr>
+<td>docker-compose -f docker-compose.yml up -d</td>
+<td>指定 compose 文件</td>
+</tr>
+<tr>
+<td>docker-compose rm</td>
+<td>删除已停止的容器</td>
+</tr>
+</tbody></table>
+<h2 id="三、例子"><a href="#三、例子" class="headerlink" title="三、例子"></a>三、例子</h2><ul>
+<li>最小模板</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&quot;3.8&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="string">服务名:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">镜像:版本</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;宿主机端口:容器端口&quot;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>编写一个</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&quot;3.8&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">mysql:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">mysql:5.7</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="attr">MYSQL_ROOT_PASSWORD:</span> <span class="string">root</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">app-net</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">app:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">nginx:alpine</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;8082:80&quot;</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">app-net</span></span><br><span class="line"></span><br><span class="line"><span class="attr">networks:</span></span><br><span class="line">  <span class="attr">app-net:</span></span><br><span class="line">    <span class="attr">driver:</span> <span class="string">bridge</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>检查配置文件有没有问题</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-compose config -q</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>-q</code> 无任何输出代表无问题,<code>echo $?</code> 也是 0</li>
+</ul>
+<ol start="2">
+<li>启动-后台启动</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-compose up -d</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/zxiny343/PicGo/image/20260201231533554.png" alt="image-20260201231524836"></p>
+<ol start="3">
+<li>根据常用命令的查询状态命令</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker-compose ps</span><br><span class="line">docker network <span class="built_in">ls</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/zxiny343/PicGo/image/20260201231831504.png" alt="image-20260201231829953"></p>
+<ol start="4">
+<li>停止</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-compose stop</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/zxiny343/PicGo/image/20260201231935850.png" alt="image-20260201231932776"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://zxiny343.github.io">zxiny</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://zxiny343.github.io/ops/ops/docker/80380182/">https://zxiny343.github.io/ops/ops/docker/80380182/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://zxiny343.github.io" target="_blank">我的博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Docker/">Docker</a><a class="post-meta__tags" href="/tags/%E5%AE%B9%E5%99%A8%E7%BC%96%E6%8E%92/">容器编排</a><a class="post-meta__tags" href="/tags/Docker-Compose/">Docker Compose</a><a class="post-meta__tags" href="/tags/%E9%9B%86%E7%BE%A4%E7%AE%A1%E7%90%86/">集群管理</a><a class="post-meta__tags" href="/tags/%E8%B0%83%E5%BA%A6/">调度</a><a class="post-meta__tags" href="/tags/%E5%AE%B9%E5%99%A8/">容器</a></div><div class="post-share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/zxiny343/PicGo/blog/20260412173938542.jpeg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/nginx-lb-phase1/" title="Nginx-负载均衡-核心流程-第一阶段"><img class="cover" src="https://cdn.jsdelivr.net/gh/zxiny343/PicGo@main/blog/v2-0fcd81042a5ee007bcddf4fccfb19ee4_720w.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Nginx-负载均衡-核心流程-第一阶段</div></div><div class="info-2"><div class="info-item-1">Nginx-反向代理流程一、 四个关键阶段:one: 入口阶段（客户端 → Nginx）客户端（如浏览器）向Nginx服务器（通常监听80或443端口）发起HTTP&#x2F;HTTPS请求。Nginx的监听模块接收请求，并根据server_name和listen指令确定处理该请求的虚拟主机。 Listen 层 基础监听 80  1234server &#123;    listen 80;    server_name example.com;&#125;   指定 IP + 端口  1234server &#123;    listen 192.168.1.10:80;    server_name example.com;&#125;       同时监听 IPv4 + IPv6  123456server &#123;    listen 80;    listen [::]:80;    server_name example.com;&#125;       https  开启ssl ，必须配合证书 1234567server &#123;    listen 443...</div></div></div></a><a class="pagination-related" href="/ops/ops/docker/f61655ea/" title="Dockerfile自动化构建"><img class="cover" src="https://cdn.jsdelivr.net/gh/zxiny343/PicGo/blog/20260412180505833.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Dockerfile自动化构建</div></div><div class="info-2"><div class="info-item-1">Dockerfile一、Dockerfile 是什么Dockerfile 是一个文本文件，它通过一系列指令定义如何构建一个 Docker 镜像。 二、Dockerfile 的基本结构一个最简单的 Dockerfile 通常包含以下几类指令：  FROM：指定基础镜像 WORKDIR：设置工作目录 COPY &#x2F; ADD：拷贝文件 RUN：构建阶段执行命令 CMD &#x2F; ENTRYPOINT：容器启动命令  简单实例 12345FROM python:3.10WORKDIR /appCOPY . .RUN pip install -r requirements.txtCMD [&quot;python&quot;, &quot;main.py&quot;]  三、DockerFile基础知识 每条指令必须大写，且后面至少跟一个参数 #表示注释 指令从上到下依次执行 每条指令都会创建一个新的镜像层，并对镜像层进行提交  四、保留字   指令 作用 其他    FROM 指定已存在的一个基础镜像 必须在第一行   RUN 构建(build)时执行命令 RUN &lt;命...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/ops/ops/docker/e6a40fe3/" title="Docke简介"><img class="cover" src="https://cdn.jsdelivr.net/gh/zxiny343/PicGo/blog/20260412173938547.jpeg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-04-12</div><div class="info-item-2">Docke简介</div></div><div class="info-2"><div class="info-item-1">Docker简介1. Docker 的产生背景### 1.1 传统应用部署面临的问题  在 Docker 出现之前，企业级应用主要通过 物理机部署 或 虚拟机部署 的方式运行。随着业务复杂度和系统规模的扩大，这些传统部署模式逐渐暴露出一系列问题。 ​		1.1.1 环境不一致问题 实际开发流程中，通常会经历以下几个环境： 开发环境-&gt;测试环境-&gt;预发布环境-&gt;生产环境 不同环境之间在 操作系统版本、依赖库版本、运行时配置 等方面往往存在差异，导致经典问题：  “在我电脑上是好的，为什么上线就不行了？”  环境不一致会显著增加问题排查成本，并延缓交付效率。 ​		1.1.2 应用部署和迁移成本高 传统部署方式下:  应用需要手动安装运行环境（如 JDK、Python、Node.js 等） 依赖版本需要人工维护 应用迁移到新服务器时，需要重复安装和配置  ​		1.1.3 资源利用率低  物理机部署：资源固定，扩缩容困难  虚拟机部署：  每个虚拟机都包含完整操作系统 启动慢（分钟级） 占用磁盘和内存资源大  在高并发和弹性需求场景下，传统虚拟化方式显得笨重且成本高...</div></div></div></a><a class="pagination-related" href="/ops/ops/docker/89826705/" title="Docker入门"><img class="cover" src="https://cdn.jsdelivr.net/gh/zxiny343/PicGo/blog/20260412173938545.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-04-12</div><div class="info-item-2">Docker入门</div></div><div class="info-2"><div class="info-item-1">1. Docker简介什么是DockerDocker是一个开源的平台，用于开发、部署和运行应用程序。它允许开发者将应用程序及其所有依赖项打包到一个标准化的单元中，称为容器。这些容器可以在任何支持Docker的环境中一致地运行，从而简化了软件的分发和部署过程。 Docker的核心概念 镜像（Image）：Docker镜像是一个只读的模板，其中包含了运行应用程序所需的所有内容，包括代码、运行时、库和配置文件。镜像是构建容器的基础。 容器（Container）：容器是镜像的一个运行实例。它是一个轻量级、独立的执行环境，可以在几乎任何地方运行。容器在启动时创建一个隔离的进程空间，确保应用程序之间不会相互干扰。 Docker引擎（Docker Engine）：这是一个轻量级的运行时和工具集，用于构建和运行Docker容器。Docker引擎包含了守护进程（daemon），一个REST API以及一个命令行界面（CLI）。 Docker Hub：这是一个云端的注册表服务，用于存储和分发Docker镜像。开发者可以从Docker Hub下载公共镜像，或者上传自己的镜像以供他人使用。  Docke...</div></div></div></a><a class="pagination-related" href="/ops/ops/docker/f61655ea/" title="Dockerfile自动化构建"><img class="cover" src="https://cdn.jsdelivr.net/gh/zxiny343/PicGo/blog/20260412180505833.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-03-11</div><div class="info-item-2">Dockerfile自动化构建</div></div><div class="info-2"><div class="info-item-1">Dockerfile一、Dockerfile 是什么Dockerfile 是一个文本文件，它通过一系列指令定义如何构建一个 Docker 镜像。 二、Dockerfile 的基本结构一个最简单的 Dockerfile 通常包含以下几类指令：  FROM：指定基础镜像 WORKDIR：设置工作目录 COPY &#x2F; ADD：拷贝文件 RUN：构建阶段执行命令 CMD &#x2F; ENTRYPOINT：容器启动命令  简单实例 12345FROM python:3.10WORKDIR /appCOPY . .RUN pip install -r requirements.txtCMD [&quot;python&quot;, &quot;main.py&quot;]  三、DockerFile基础知识 每条指令必须大写，且后面至少跟一个参数 #表示注释 指令从上到下依次执行 每条指令都会创建一个新的镜像层，并对镜像层进行提交  四、保留字   指令 作用 其他    FROM 指定已存在的一个基础镜像 必须在第一行   RUN 构建(build)时执行命令 RUN &lt;命...</div></div></div></a><a class="pagination-related" href="/ops/ops/docker/e012af00/" title="Docker CIG"><img class="cover" src="https://cdn.jsdelivr.net/gh/zxiny343/PicGo/blog/20260412175152849.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-04-12</div><div class="info-item-2">Docker CIG</div></div><div class="info-2"><div class="info-item-1">Docker  CIG一、整体架构123456Docker Host ├─ cAdvisor     → 采集容器资源 │                （CPU / 内存 / IO / 网络） ├─ InfluxDB     → 时序数据存储 └─ Grafana      → 可视化 &amp; 告警   数据流向  cAdvisor → InfluxDB → Grafana 二、cAdvisor 是什么cAdvisor（Container Advisor） 是 Google 开源的 容器资源监控采集工具，主要用于 Docker 容器运行状态与资源使用情况的实时监控。 针对 每一个容器，cAdvisor 会持续采集：CPU、内存、网络、磁盘、容器生命周期等。 三、InfluxDB 是什么InfluxDB 是一个 专门用于时序数据（Time Series Data）的数据库。用来存“随时间变化的数据”，它是监控体系里的“数据仓库”。 InfluxDB 的核心特点：为时序数据而生、内置数据压缩 &amp; 清理机制、查询语言简单。 四、Grafana 是什么Grafana 是一个...</div></div></div></a><a class="pagination-related" href="/ops/ops/docker/d96fc59d/" title="Dodcker实验-mysql主从复制"><img class="cover" src="https://cdn.jsdelivr.net/gh/zxiny343/PicGo/blog/20260412182053573.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-04-12</div><div class="info-item-2">Dodcker实验-mysql主从复制</div></div><div class="info-2"><div class="info-item-1">Docker-Mysql主从复制1.准备规划    端口 角色     3307 主    3308 从         2. 主服务器实例 新建主服务器实例  12345678910docker run -p 3307:3306 \--name mysql-master \--privileged=true \-v /app/mysql-master/conf:/etc/mysql/conf.d \-v /app/mysql-master/log:/var/log/mysql \-v /app/mysql-master/data:/var/lib/mysql \-e MYSQL_ROOT_PASSWORD=root \-e TZ=Asia/Shanghai \-d mysql:5.7   新建my.cnf  进入挂载的本地目录 conf/vi  my.cnf 12345678910111213141516[mysqld]## 设置server_id, 同一个局域网中需要唯一server_id=101## 指定不需要同步的数据库名称binlog-ignore-db=mysql##...</div></div></div></a><a class="pagination-related" href="/ops/ops/docker/3849e8ae/" title="Docker网络"><img class="cover" src="https://cdn.jsdelivr.net/gh/zxiny343/PicGo/blog/20260412175500479.jpeg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-04-12</div><div class="info-item-2">Docker网络</div></div><div class="info-2"><div class="info-item-1">Docker 网络一、为什么 Docker 需要网络在 Docker 里，每个容器本质上是一个隔离的进程 + 独立网络命名空间：  有自己的 IP 有自己的网卡（veth） 有自己的路由表  👉 所以问题来了：  容器如何访问外网？ 容器之间如何通信？ 容器如何被宿主机 &#x2F; 外部访问？  这些都由 Docker Network 解决。 二、Docker 的网络模型（核心概念）​	Docker 使用的是 Linux Network Namespace + 虚拟网桥（Bridge）。 关键组件：    组件 作用    Network Namespace 容器的“网络隔离空间”   veth pair 容器 ↔ 宿主机的虚拟网卡对   bridge 二层交换机，连接多个容器   iptables NAT、端口映射、隔离规则   三、Docker 默认网络安装 Docker 后，默认就有一个网络： 1docker network ls   👉 bridge: 为每一个容器分配、设置IP等，并将容器连接到一个docker0的虚拟网桥，默认为该模式。  每个容器拥有：  独立...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/gaegfdaeff.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">zxiny</div><div class="author-info-description">描述</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">16</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">57</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/zxiny343" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Docker-Compose"><span class="toc-number">1.</span> <span class="toc-text">Docker-Compose</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">1.1.</span> <span class="toc-text">一、是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">1.2.</span> <span class="toc-text">二、常用命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E4%BE%8B%E5%AD%90"><span class="toc-number">1.3.</span> <span class="toc-text">三、例子</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/ops/ops/docker/e012af00/" title="Docker CIG"><img src="https://cdn.jsdelivr.net/gh/zxiny343/PicGo/blog/20260412175152849.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Docker CIG"/></a><div class="content"><a class="title" href="/ops/ops/docker/e012af00/" title="Docker CIG">Docker CIG</a><time datetime="2026-04-12T09:25:05.000Z" title="发表于 2026-04-12 17:25:05">2026-04-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/ops/ops/docker/9f97cbef/" title="Docker Portainer 可视化工具"><img src="https://cdn.jsdelivr.net/gh/zxiny343/PicGo/blog/20260412174918164.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Docker Portainer 可视化工具"/></a><div class="content"><a class="title" href="/ops/ops/docker/9f97cbef/" title="Docker Portainer 可视化工具">Docker Portainer 可视化工具</a><time datetime="2026-04-12T09:22:29.000Z" title="发表于 2026-04-12 17:22:29">2026-04-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/ops/ops/docker/29dc6fe8/" title="Docker常用命令"><img src="https://cdn.jsdelivr.net/gh/zxiny343/PicGo/blog/20260412173938546.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Docker常用命令"/></a><div class="content"><a class="title" href="/ops/ops/docker/29dc6fe8/" title="Docker常用命令">Docker常用命令</a><time datetime="2026-04-12T09:18:55.000Z" title="发表于 2026-04-12 17:18:55">2026-04-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/ops/ops/docker/e6a40fe3/" title="Docke简介"><img src="https://cdn.jsdelivr.net/gh/zxiny343/PicGo/blog/20260412173938547.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Docke简介"/></a><div class="content"><a class="title" href="/ops/ops/docker/e6a40fe3/" title="Docke简介">Docke简介</a><time datetime="2026-04-12T09:17:14.000Z" title="发表于 2026-04-12 17:17:14">2026-04-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/ops/ops/docker/2a3c0ad3/" title="Docker数据卷"><img src="https://cdn.jsdelivr.net/gh/zxiny343/PicGo/blog/20260412175251459.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Docker数据卷"/></a><div class="content"><a class="title" href="/ops/ops/docker/2a3c0ad3/" title="Docker数据卷">Docker数据卷</a><time datetime="2026-04-12T09:15:25.000Z" title="发表于 2026-04-12 17:15:25">2026-04-12</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-flex"><div class="footer-flex-items"><div class="footer-flex-item"><div class="footer-flex-title">站点</div><div class="footer-flex-content"><a href="/about/" target="_blank" title="关于">关于</a><a href="/archives/" target="_blank" title="归档">归档</a><a href="/link/" target="_blank" title="友链">友链</a></div></div></div><div class="footer-flex-items"><div class="footer-flex-item"><div class="footer-flex-title">内容</div><div class="footer-flex-content"><a href="/categories/" target="_blank" title="分类">分类</a><a href="/tags/" target="_blank" title="标签">标签</a></div></div></div><div class="footer-flex-items"><div class="footer-flex-item"><div class="footer-flex-title">联系</div><div class="footer-flex-content"><a href="https://github.com/zxiny343" target="_blank" title="GitHub">GitHub</a><a href="mailto:zxiny163@163.com" target="_blank" title="邮箱">邮箱</a></div></div></div></div><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By zxiny</span></div><div class="footer_custom_text">记录所思，安放时间</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><div class="js-pjax"></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/fireworks.min.js"></script><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax src="https://registry.npmmirror.com/oh-my-live2d/latest/files"></script><script>const oml2d = OML2D.loadOml2d({libraryUrls:{"complete":"https://registry.npmmirror.com/oh-my-live2d/latest/files/lib/complete.js","cubism2":"https://registry.npmmirror.com/oh-my-live2d/latest/files/lib/cubism2.js","cubism5":"https://registry.npmmirror.com/oh-my-live2d/latest/files/lib/cubism5.js"},mobileDisplay:true,models:[{"path":"https://cdn.jsdelivr.net/gh/zxiny343/live2d_source@main/%E7%BA%B1%E9%9B%BE/model/sagiri/sagiri.model.json","mobilePosition":[-10,23],"mobileScale":0.1,"mobileStageStyle":{"width":180,"height":166},"motionPreloadStrategy":"IDLE","position":[-10,35],"scale":0.15,"stageStyle":{"width":250,"height":250}},{"path":"https://cdn.jsdelivr.net/gh/zxiny343/live2d_source@main/bilibili-22/index.json","scale":0.12,"position":[0,0],"stageStyle":{"width":250},"mobileScale":0.08,"mobilePosition":[0,0],"mobileStageStyle":{"width":180}},{"path":"https://cdn.jsdelivr.net/gh/zxiny343/live2d_source@main/umaru/model.json","scale":0.12,"position":[0,0],"mobileScale":0.08,"mobilePosition":[0,0],"mobileStageStyle":{"width":180},"stageStyle":{"width":250}}],parentElement:document.body,primaryColor:"var(--btn-bg)",sayHello:false,tips:{style: {"width":230,"height":120,"left":"calc(50% - 20px)","top":"-100px"},mobileStyle: {"width":180,"height":80,"left":"calc(50% - 30px)","top":"-100px"},idleTips:{interval:15000,message:function(){
+  return axios.get('https://v1.hitokoto.cn?c=i')
+    .then(function (response) {
+      return response.data.hitokoto ;
+    })
+    .catch(function (error) {
+      console.error(error);
+    });
+}
+}}});</script><!-- hexo injector body_end end --></body></html>
